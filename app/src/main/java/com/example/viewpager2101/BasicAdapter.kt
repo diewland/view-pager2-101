@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.isNotEmpty
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 
@@ -28,6 +29,7 @@ class BasicAdapter(context: Context, tvList: ArrayList<TextView>, viewPager2: Vi
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if(holder.container.isNotEmpty()) return
         val t = data.get(position)
         holder.container.addView(t)
     }
