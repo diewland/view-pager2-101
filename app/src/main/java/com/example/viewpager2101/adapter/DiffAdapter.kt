@@ -1,17 +1,22 @@
-package com.example.viewpager2101
+package com.example.viewpager2101.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.view.isNotEmpty
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.example.viewpager2101.R
+import com.example.viewpager2101.diff.DiffCallback
 
-class BasicAdapter(context: Context, tvList: ArrayList<TextView>, viewPager2: ViewPager2):
-    RecyclerView.Adapter<BasicAdapter.ViewHolder>() {
+const val TAG = "DIFF_ADAPTER"
+
+class DiffAdapter(context: Context, tvList: ArrayList<TextView>, viewPager2: ViewPager2):
+    RecyclerView.Adapter<DiffAdapter.ViewHolder>() {
 
     private val mInflater: LayoutInflater
     private val data: ArrayList<TextView>
@@ -29,9 +34,11 @@ class BasicAdapter(context: Context, tvList: ArrayList<TextView>, viewPager2: Vi
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if(holder.container.isNotEmpty()) return
-        val t = data.get(position)
-        holder.container.addView(t)
+
+        Log.d(TAG, "remove old views and add view number $position")
+
+        holder.container.removeAllViews() // when update items, remove old items first
+        holder.container.addView(data.get(position))
     }
 
     override fun getItemCount(): Int {
@@ -40,23 +47,19 @@ class BasicAdapter(context: Context, tvList: ArrayList<TextView>, viewPager2: Vi
 
     inner class ViewHolder internal constructor(itemView: View):
         RecyclerView.ViewHolder(itemView) {
-
         var container: LinearLayout
-
         init {
             container = itemView.findViewById(R.id.blank_container)
-            /*
-            myTextView = itemView.findViewById(R.id.tvTitle)
-            relativeLayout = itemView.findViewById(R.id.container)
-            button = itemView.findViewById(R.id.btnToggle)
-            button.setOnClickListener {
-                viewPager2.orientation = when(viewPager2.orientation) {
-                    ViewPager2.ORIENTATION_HORIZONTAL -> ViewPager2.ORIENTATION_VERTICAL
-                    else -> ViewPager2.ORIENTATION_HORIZONTAL
-                }
-            }
-            */
         }
     }
 
+    // hilight function <3
+    fun updateItems(newData: ArrayList<TextView>) {
+        val callback = DiffCallback(data, newData)
+        val diffResult = DiffUtil.calculateDiff(callback)
+
+        data.clear()
+        data.addAll(newData)
+        diffResult.dispatchUpdatesTo(this)
+    }
 }

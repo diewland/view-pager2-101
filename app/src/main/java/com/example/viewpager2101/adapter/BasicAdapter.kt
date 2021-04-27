@@ -1,60 +1,52 @@
-package com.example.viewpager2101
+package com.example.viewpager2101.adapter
 
 import android.content.Context
-import androidx.viewpager2.widget.ViewPager2
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import com.example.viewpager2101.R
+import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.RelativeLayout
+import androidx.core.view.isNotEmpty
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import com.example.viewpager2101.R
 
-class ViewPagerAdapter internal constructor(
-    context: Context?,
-    data: List<String>,
-    viewPager2: ViewPager2
-) : RecyclerView.Adapter<ViewPagerAdapter.ViewHolder>() {
+class BasicAdapter(context: Context, tvList: ArrayList<TextView>, viewPager2: ViewPager2):
+    RecyclerView.Adapter<BasicAdapter.ViewHolder>() {
 
-    private val mData: List<String>
     private val mInflater: LayoutInflater
+    private val data: ArrayList<TextView>
     private val viewPager2: ViewPager2
-    private val colorArray = intArrayOf(
-        android.R.color.black,
-        android.R.color.holo_blue_dark,
-        android.R.color.holo_green_dark,
-        android.R.color.holo_red_dark
-    )
 
     init {
         mInflater = LayoutInflater.from(context)
-        mData = data
+        data = tvList
         this.viewPager2 = viewPager2
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = mInflater.inflate(R.layout.item_viewpager, parent, false)
+        val view = mInflater.inflate(R.layout.item_blank, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val animal = mData[position]
-        holder.myTextView.text = animal
-        holder.relativeLayout.setBackgroundResource(colorArray[position])
+        if(holder.container.isNotEmpty()) return
+        val t = data.get(position)
+        holder.container.addView(t)
     }
 
     override fun getItemCount(): Int {
-        return mData.size
+        return data.size
     }
 
-    inner class ViewHolder internal constructor(itemView: View) :
+    inner class ViewHolder internal constructor(itemView: View):
         RecyclerView.ViewHolder(itemView) {
-        var myTextView: TextView
-        var relativeLayout: RelativeLayout
-        var button: Button
+
+        var container: LinearLayout
 
         init {
+            container = itemView.findViewById(R.id.blank_container)
+            /*
             myTextView = itemView.findViewById(R.id.tvTitle)
             relativeLayout = itemView.findViewById(R.id.container)
             button = itemView.findViewById(R.id.btnToggle)
@@ -64,6 +56,7 @@ class ViewPagerAdapter internal constructor(
                     else -> ViewPager2.ORIENTATION_HORIZONTAL
                 }
             }
+            */
         }
     }
 

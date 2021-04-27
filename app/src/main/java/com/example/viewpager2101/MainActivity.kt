@@ -5,6 +5,8 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
+import com.example.viewpager2101.adapter.BasicAdapter
+import com.example.viewpager2101.adapter.DiffAdapter
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,25 +22,30 @@ class MainActivity : AppCompatActivity() {
         btn1 = findViewById(R.id.btn_1)
         btn2 = findViewById(R.id.btn_2)
 
+        // init data
         val list = arrayListOf(
             "First Screen",
             "Second Screen",
             "Third Screen",
             "Fourth Screen",
         )
-
         var tvList = buildList(list)
 
+        // init pager adapter
         // viewPager2.adapter = ViewPagerAdapter(this, list, viewPager2)
         // viewPager2.adapter = BasicAdapter(this, tvList, viewPager2)
-        updateData(tvList)
+        // updateData(tvList)
+        val diffAdapter = DiffAdapter(this, tvList, viewPager2)
+        viewPager2.adapter = diffAdapter
 
         // bind buttons
         btn1.setOnClickListener {
-            updateData("one", "two", "three")
+            // updateData("one", "two", "three")
+            diffAdapter.updateItems(buildList(listOf( "one", "two", "three" )))
         }
         btn2.setOnClickListener {
-            updateData("apple", "microsoft", "google")
+            // updateData("apple", "microsoft", "google")
+            diffAdapter.updateItems(buildList(listOf( "apple", "microsoft", "google" )))
         }
     }
 
