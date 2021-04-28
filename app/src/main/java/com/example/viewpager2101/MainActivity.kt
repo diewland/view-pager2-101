@@ -1,16 +1,22 @@
 package com.example.viewpager2101
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.viewpager2101.adapter.BasicAdapter
 import com.example.viewpager2101.adapter.DiffAdapter
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+
+const val TAG = "SWIPE101"
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var viewPager2: ViewPager2
+    lateinit var tabLayout: TabLayout
     lateinit var btn1: Button
     lateinit var btn2: Button
 
@@ -19,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         viewPager2 = findViewById(R.id.viewPager2)
+        tabLayout = findViewById(R.id.tab_layout)
         btn1 = findViewById(R.id.btn_1)
         btn2 = findViewById(R.id.btn_2)
 
@@ -45,8 +52,14 @@ class MainActivity : AppCompatActivity() {
         }
         btn2.setOnClickListener {
             // updateData("apple", "microsoft", "google")
-            diffAdapter.updateItems(buildList(listOf( "apple", "microsoft", "google" )))
+            diffAdapter.updateItems(buildList(listOf( "apple", "microsoft", "google", "amd" )))
         }
+
+        // tab layout + page viewer
+        TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
+            Log.d(TAG, "tab: $tab")
+            Log.d(TAG, "position: $position")
+        }.attach()
     }
 
 
@@ -62,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         t.forEach {
             val t = TextView(this)
             t.text = it
+            t.textSize = 75f
             tvList.add(t)
         }
         return tvList

@@ -24,6 +24,7 @@ class DiffCallback(
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        // return false
         val old = oldItems[oldItemPosition]
         val new = newItems[newItemPosition]
         return old.text.toString().equals(new.text.toString())
